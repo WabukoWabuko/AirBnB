@@ -3,8 +3,27 @@
 
     
     {% block title %}
-        Login - AirBnB Management
+        Login
     {% endblock title %}
+
+    
+    {% block style %}
+    <style>
+        /* Add your image path here */
+        .login-container {
+            background: url('{% static "images/Background1.jpg" %}') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+        @media (max-width: 768px) {
+            .login-container {
+                background: url('{% static "images/Background1.jpg" %}') no-repeat center center fixed;
+                background-size: cover;
+            }
+        }
+    </style>
+    {% endblock style %}
+        
         
     
 
