@@ -31,10 +31,7 @@
                 <a href="javascript:history.back()" class="btn btn-outline-secondary">
                     &larr; Back
                 </a>
-                <!-- Other Ways Button -->
-                <a href="#" class="btn btn-outline-info">
-                    Other Ways
-                </a>
+                
             </div>
 
             <h2 class="text-center mb-4">Identity Verification</h2>
@@ -42,6 +39,9 @@
             <form method="POST" enctype="multipart/form-data">
                 <!-- CSRF Token -->
                 {% csrf_token %}
+                <!-- Phone Number -->
+                <label for="phoneNumber" class="me-2">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="1234567890" required>
                 
                 <!-- ID Card Upload -->
                 <div class="form-group mb-3">
