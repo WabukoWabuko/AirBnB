@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add your image path here */
+        .verification-container {
+            background: url('{% static "images/Logo.webp" %}') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+        @media (max-width: 768px) {
+            .verification-container {
+                background: url('{% static "images/Logo.webp" %}') no-repeat center center fixed;
+                background-size: cover;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid verification-container d-flex justify-content-center align-items-center">
+        <div class="row w-50 p-4 bg-white rounded shadow">
+            <!-- Back and Other Ways Buttons -->
+            <div class="d-flex justify-content-between mb-4">
+                <!-- Back Button -->
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    &larr; Back
+                </a>
+                <!-- Other Ways Button -->
+                <a href="#" class="btn btn-outline-info">
+                    Other Ways
+                </a>
+            </div>
+
+            <h2 class="text-center mb-4">Identity Verification</h2>
+            <p class="text-center">To verify your identity, upload your government-issued ID and a recent photo.</p>
+            <form method="POST" enctype="multipart/form-data">
+                <!-- CSRF Token -->
+                {% csrf_token %}
+                
+                <!-- ID Card Upload -->
+                <div class="form-group mb-3">
+                    <label for="idCard">Upload ID Card (Image)</label>
+                    <input type="file" class="form-control" id="idCard" name="idCard" accept="image/*" required>
+                    <small class="form-text text-muted">Upload a clear photo of your government-issued ID.</small>
+                </div>
+
+                <!-- Current Photo Upload -->
+                <div class="form-group mb-3">
+                    <label for="currentPhoto">Upload Current Photo</label>
+                    <input type="file" class="form-control" id="currentPhoto" name="currentPhoto" accept="image/*" required>
+                    <small class="form-text text-muted">Take a photo or upload a recent picture for verification.</small>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Submit for Verification</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="text-center fixed-bottom py-3 bg-light">
+        <p>Copyright © 2024 - WabukoWabuko Softwares</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +10,13 @@
     <style>
         /* Add your image path here */
         .signup-container {
-            background: url('your-image.jpg') no-repeat center center fixed;
+            background: url('{% static "images/Background2.jpg" %}') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
         }
         @media (max-width: 768px) {
             .signup-container {
-                background: url('your-image.jpg') no-repeat center center fixed;
+                background: url('{% static "images/Background2.jpg" %}') no-repeat center center fixed;
                 background-size: cover;
             }
         }
@@ -23,9 +25,9 @@
 <body>
     <div class="container-fluid signup-container d-flex justify-content-center align-items-center">
         <div class="row w-50 p-4 bg-white rounded shadow">
-            <div class="col-12 text-center mb-4">
+            <!-- <div class="col-12 text-center mb-4">
                 <img src="your-image.jpg" alt="AirBnB Logo" class="img-fluid">
-            </div>
+            </div> -->
             <h2 class="text-center mb-4">Create an Account</h2>
             <form method="POST" enctype="multipart/form-data">
                 <!-- Full Name Field -->
@@ -51,29 +53,14 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                 </div>
-
-                <!-- ID Card Upload Field -->
-                <div class="form-group mb-3">
-                    <label for="idCard">Upload ID Card (Image)</label>
-                    <input type="file" class="form-control" id="idCard" name="idCard" accept="image/*" required>
-                    <small class="form-text text-muted">You can either upload an ID card image or take a photo with your device's camera.</small>
-                </div>
-
-                <!-- Profile Picture Upload Field -->
-                <div class="form-group mb-3">
-                    <label for="profilePicture">Upload Profile Picture</label>
-                    <input type="file" class="form-control" id="profilePicture" name="profilePicture" accept="image/*" required>
-                    <small class="form-text text-muted">You can upload your profile picture or take one with your camera.</small>
+                <!-- Link to Login -->
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a href="{% url 'login_page' %}">Login</a></p>
                 </div>
 
                 <!-- Sign Up Button -->
                 <button type="submit" class="btn btn-primary w-100">Sign Up</button>
             </form>
-            
-            <!-- Link to Login -->
-            <div class="text-center mt-3">
-                <p>Already have an account? <a href="/login">Login</a></p>
-            </div>
         </div>
     </div>
 
