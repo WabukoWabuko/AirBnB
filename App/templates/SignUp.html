@@ -3,54 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | AirBnB Management System</title>
-    <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Sign Up - AirBnB Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add your image path here */
+        .signup-container {
+            background: url('your-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+        @media (max-width: 768px) {
+            .signup-container {
+                background: url('your-image.jpg') no-repeat center center fixed;
+                background-size: cover;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title text-center">Sign Up</h4>
-                        <form method="POST" action="{% url 'signup' %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                        </form>
-                        <div class="text-center mt-3">
-                            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
-                        </div>
-                    </div>
+    <div class="container-fluid signup-container d-flex justify-content-center align-items-center">
+        <div class="row w-50 p-4 bg-white rounded shadow">
+            <div class="col-12 text-center mb-4">
+                <img src="your-image.jpg" alt="AirBnB Logo" class="img-fluid">
+            </div>
+            <h2 class="text-center mb-4">Create an Account</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <!-- Full Name Field -->
+                <div class="form-group mb-3">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full Name" required>
                 </div>
+                
+                <!-- Email Field -->
+                <div class="form-group mb-3">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group mb-3">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                </div>
+
+                <!-- ID Card Upload Field -->
+                <div class="form-group mb-3">
+                    <label for="idCard">Upload ID Card (Image)</label>
+                    <input type="file" class="form-control" id="idCard" name="idCard" accept="image/*" required>
+                    <small class="form-text text-muted">You can either upload an ID card image or take a photo with your device's camera.</small>
+                </div>
+
+                <!-- Profile Picture Upload Field -->
+                <div class="form-group mb-3">
+                    <label for="profilePicture">Upload Profile Picture</label>
+                    <input type="file" class="form-control" id="profilePicture" name="profilePicture" accept="image/*" required>
+                    <small class="form-text text-muted">You can upload your profile picture or take one with your camera.</small>
+                </div>
+
+                <!-- Sign Up Button -->
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            </form>
+            
+            <!-- Link to Login -->
+            <div class="text-center mt-3">
+                <p>Already have an account? <a href="/login">Login</a></p>
             </div>
         </div>
-        <footer class="text-center mt-5">
-            <p>&copy; 2024 - WabukoWabuko Softwares</p>
-        </footer>
     </div>
 
-    <!-- Bootstrap JS CDN -->
+    <!-- Footer Section -->
+    <footer class="text-center fixed-bottom py-3 bg-light">
+        <p>Copyright © 2024 - WabukoWabuko Softwares</p>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
