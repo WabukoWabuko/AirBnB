@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 def Login(request):
+    
     return render(request, "Login.html")
 
 def SignUp(request):
@@ -14,3 +15,7 @@ def IDVerification(request):
 
 def otherVerification(request):
     return render(request, "otherVerificationWays.html")
+
+def dashboard(request):
+    #In Dashboard should display data from the DB
+    return render(request, "Dashboard.html")
