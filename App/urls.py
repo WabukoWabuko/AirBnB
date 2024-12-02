@@ -1,8 +1,11 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.Login, name="login_page"),
+    path('', views.Index, name="index_page"),
+    path('login/', views.Login, name="login_page"),
     path('signup/', views.SignUp, name="signup_page"),
     path('verification/', views.IDVerification, name="id_verification_page"),
     path('2FA/', views.otherVerification, name="other_verification_ways_page"),
@@ -15,4 +18,4 @@ urlpatterns = [
     path('payments/', views.payments, name="payments_page"),
     path('support/', views.support, name="support_page"),
     path('makeBooking/', views.makeBooking, name="make_booking_page"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
