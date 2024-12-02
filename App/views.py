@@ -19,3 +19,27 @@ def otherVerification(request):
 def dashboard(request):
     #In Dashboard should display data from the DB
     return render(request, "Dashboard.html")
+
+def bookings(request):
+    return render(request, "bookings.html")
+
+def faq(request):
+    return render(request, "faq.html")
+
+def feedback(request):
+    return render(request, "feedback.html")
+
+def listings(request):
+    return render(request, "listings.html")
+
+def messages(request):
+    return render(request, "messages.html")
+
+def payments(request):
+    return render(request, "payments.html")
+
+def support(request):
+    return render(request, "support.html")
+
+def makeBooking(request):
+    return render(request, "makeBooking.html")

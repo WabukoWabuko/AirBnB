@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="mb-4">Make a Booking</h1>
+        <div class="row">
+            <!-- Available Properties -->
+            <div class="col-md-6">
+                <h4>Select a Property</h4>
+                <form>
+                    <div class="mb-3">
+                        <label for="property" class="form-label">Available Properties</label>
+                        <select id="property" class="form-select" required>
+                            <option value="">-- Select Property --</option>
+                            <option>Beachfront Villa</option>
+                            <option>Cozy Apartment in Downtown</option>
+                            <option>Modern Studio near City Center</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="checkInDate" class="form-label">Check-in Date</label>
+                        <input type="date" id="checkInDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="checkOutDate" class="form-label">Check-out Date</label>
+                        <input type="date" id="checkOutDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="guests" class="form-label">Number of Guests</label>
+                        <input type="number" id="guests" class="form-control" min="1" placeholder="Enter number of guests" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Proceed to Booking</button>
+                </form>
+            </div>
+
+            <!-- Booking Details Summary -->
+            <div class="col-md-6">
+                <h4>Booking Summary</h4>
+                <p class="text-muted">Please review your booking details before proceeding.</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Property:</strong> <span id="summaryProperty">Not Selected</span></li>
+                    <li class="list-group-item"><strong>Check-in Date:</strong> <span id="summaryCheckIn">Not Selected</span></li>
+                    <li class="list-group-item"><strong>Check-out Date:</strong> <span id="summaryCheckOut">Not Selected</span></li>
+                    <li class="list-group-item"><strong>Guests:</strong> <span id="summaryGuests">0</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-update booking summary based on user input
+        const propertyInput = document.getElementById('property');
+        const checkInInput = document.getElementById('checkInDate');
+        const checkOutInput = document.getElementById('checkOutDate');
+        const guestsInput = document.getElementById('guests');
+        const summaryProperty = document.getElementById('summaryProperty');
+        const summaryCheckIn = document.getElementById('summaryCheckIn');
+        const summaryCheckOut = document.getElementById('summaryCheckOut');
+        const summaryGuests = document.getElementById('summaryGuests');
+
+        propertyInput.addEventListener('change', () => summaryProperty.textContent = propertyInput.value || "Not Selected");
+        checkInInput.addEventListener('change', () => summaryCheckIn.textContent = checkInInput.value || "Not Selected");
+        checkOutInput.addEventListener('change', () => summaryCheckOut.textContent = checkOutInput.value || "Not Selected");
+        guestsInput.addEventListener('input', () => summaryGuests.textContent = guestsInput.value || "0");
+    </script>
+</body>
+</html>
