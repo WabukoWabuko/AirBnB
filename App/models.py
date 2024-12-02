@@ -2,9 +2,9 @@ from django.db import models
 
 # User Model
 class User(models.Model):
-    email_address = models.EmailField(max_length=50, blank=False, null=False, unique=True)
+    email = models.EmailField(max_length=50, blank=False, null=False, unique=True)
     password = models.CharField(max_length=150)
-    full_name = models.CharField(max_length=150)
+    fullname = models.CharField(max_length=150)
     phone = models.CharField(max_length=13, blank=True, null=True)
     
     def __str__(self):
