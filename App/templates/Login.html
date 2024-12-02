@@ -28,13 +28,24 @@
     
 
 {% block body %}
+
     <div class="container-fluid login-container d-flex justify-content-center align-items-center">
         <div class="row w-50 p-4 bg-white rounded shadow">
             <!-- <div class="col-12 text-center mb-4">
                 <img src="your-image.jpg" alt="AirBnB Logo" class="img-fluid">
             </div> -->
             <h2 class="text-center mb-4">Login</h2>
+            
             <form method="POST">
+                <!-- Display messages
+                {% if messages %}
+                <div>
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %} -->
+
                 {% csrf_token %}
                 <div class="form-group mb-3">
                     <label for="email">Email address</label>

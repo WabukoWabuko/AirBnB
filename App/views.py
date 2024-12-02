@@ -1,8 +1,13 @@
+import time
+from django.contrib.auth.hashers import check_password
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Booking, User
+from .models import * # Which are Booking, User, UserVerification, Listing, Amenity, PropertyPhoto,
+                    #Payment, Review, Message, Notification, SupportTicket, BlackList, SecurityAlert,
+                    #GeoTracking, Discount
 
 # Leading to Home/Index page as my landing page.
 def Index(request):
@@ -14,45 +19,74 @@ def Login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, f'Welcome back, {user.fullname}!')
-            return redirect('dashboard_page')
-        else:
-            messages.error(request, 'Invalid email or password.')
-    return render(request, "Login.html")
+        try:
+            # Query the database for the user with the provided email
+            user = User.objects.get(email=email)
+            
+            # Check if the provided password matches the hashed password in the DB
+            if password == user.password:
+                # Log the user in
+                time.sleep(3)
+                messages.success(request, f'Welcome back, {user.fullName}!')
+                return redirect('dashboard_page')
+            else:
+                messages.error(request, 'Invalid email or password.')
+        except User.DoesNotExist:
+            messages.error(request, 'Email does not exist')
+
+    return render(request, 'Login.html')
 
 # Creating an account at this point
 def SignUp(request):
     # After clicking the button it should submit and go direct to verification page 
     if request.method == 'POST':
-        fullname = request.POST.get('fullname')
+        fullName = request.POST.get('fullName')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirmPassword = request.POST.get('confirmPassword')
 
         if password != confirmPassword:
             messages.error(request, 'Passwords do not match.')
-            return redirect('register')
+            return redirect('signup_page')
 
-        if User.objects.filter(fullname=fullname).exists():
-            messages.error(request, 'Username already exists.')
-            return redirect('register')
+        # if User.objects.filter(fullName=fullName).exists():
+        #     messages.error(request, 'Account already exists with this Name.')
+        #     return redirect('signup_page')
 
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email already exists.')
-            return redirect('register')
+            return redirect('signup_page')
 
         # Create the user
-        user = User.objects.create_user(username=username, email=email, password=password)
+        User.objects.create(fullName=fullName, email=email, password=password)
         messages.success(request, 'Account created successfully. Please log in.')
-        return redirect('login')
+        return redirect('id_verification_page')
     return render(request, "SignUp.html")
 
 def IDVerification(request):
+    email = request.session.get('email') # This helps in retrieving data from the previous session
+    
+    if not email:
+        messages.error(request, "Session expired. Please sign up again.")
+        return redirect('signup_page')
+        
+    userEmail = User.objects.get('email') # I am fetching Email from a different table to use it as an Fk in another table.
     # On submitting moves to page 2FA 
-    return render(request, "IDVerification.html")
+    if request.method == "POST":
+        phoneNumber = request.POST.get('phoneNumber')
+        idCard = request.FILES.get('idCard')
+        currentPhoto = request.FILES.get('currentPhoto')
+        
+        # Here is saving verification data linked to the user
+        UserVerification.objects.create(
+            userEmail=userEmail,
+            phoneNumber=phoneNumber,
+            idCard=idCard,
+            currentPhoto=currentPhoto
+        )
+        messages.success(request, "Verification successful! Fill the code sent to your email/Phone")
+        return redirect("other_verification_ways_page")
+    return render(request, "IDVerification.html", {'userEmail':userEmail})
 
 def otherVerification(request):
     return render(request, "otherVerificationWays.html")
