@@ -1,9 +1,6 @@
-import time
-from django.contrib.auth.hashers import check_password
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from .models import * # Which are Booking, User, UserVerification, Listing, Amenity, PropertyPhoto,
                     #Payment, Review, Message, Notification, SupportTicket, BlackList, SecurityAlert,
@@ -26,7 +23,6 @@ def Login(request):
             # Check if the provided password matches the hashed password in the DB
             if password == user.password:
                 # Log the user in
-                time.sleep(3)
                 messages.success(request, f'Welcome back, {user.fullName}!')
                 return redirect('dashboard_page')
             else:
@@ -63,12 +59,14 @@ def SignUp(request):
         return redirect('id_verification_page')
     return render(request, "SignUp.html")
 
+# @permission_required
 def IDVerification(request):
     email = request.session.get('email') # This helps in retrieving data from the previous session
+    user = User.objects.get(email=email)
     
-    if not email:
-        messages.error(request, "Session expired. Please sign up again.")
-        return redirect('signup_page')
+    if email:
+        messages.success(request, f"Continue with registration {user.fullName}")
+        return redirect('other_verification_ways_page')
         
     userEmail = User.objects.get('email') # I am fetching Email from a different table to use it as an Fk in another table.
     # On submitting moves to page 2FA 
