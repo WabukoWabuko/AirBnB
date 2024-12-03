@@ -62,10 +62,10 @@ def SignUp(request):
 # @permission_required
 def IDVerification(request):
     email = request.session.get('email') # This helps in retrieving data from the previous session
-    user = User.objects.get(email=email)
+    # user = User.objects.get(email=email)
     
     if email:
-        messages.success(request, f"Continue with registration {user.fullName}")
+        messages.success(request, f"Continue with registration")
         return redirect('other_verification_ways_page')
         
     userEmail = User.objects.get('email') # I am fetching Email from a different table to use it as an Fk in another table.
