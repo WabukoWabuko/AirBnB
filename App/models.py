@@ -2,9 +2,9 @@ from django.db import models
 
 # User Model
 class User(models.Model):
-    email_address = models.EmailField(max_length=50, blank=False, null=False, unique=True)
+    email = models.EmailField(max_length=50, blank=False, null=False, unique=True)
     password = models.CharField(max_length=150)
-    full_name = models.CharField(max_length=150)
+    fullName = models.CharField(max_length=150)
     phone = models.CharField(max_length=13, blank=True, null=True)
     
     def __str__(self):
@@ -12,7 +12,7 @@ class User(models.Model):
 
 # User Verification Model 
 class UserVerification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verifications")
+    email = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verifications")
     id_document = models.ImageField(upload_to='id_docs/')
     photo = models.ImageField(upload_to='photos/')
     verified_at = models.DateTimeField(auto_now_add=True)
