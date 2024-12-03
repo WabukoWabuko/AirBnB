@@ -56,16 +56,18 @@ def SignUp(request):
         # Create the user
         User.objects.create(fullName=fullName, email=email, password=password)
         messages.success(request, 'Account created successfully. Please log in.')
-        return redirect('id_verification_page')
+        return redirect('login_page') # Supposed to move to verification page
     return render(request, "SignUp.html")
 
 # @permission_required
+# Should check on the email from the previous session being compared to the ones in DB before approval to access account
+#
 def IDVerification(request):
     email = request.session.get('email') # This helps in retrieving data from the previous session
-    user = User.objects.get(email=email)
+    # user = User.objects.get(email=email)
     
     if email:
-        messages.success(request, f"Continue with registration {user.fullName}")
+        messages.success(request, f"Continue with registration")
         return redirect('other_verification_ways_page')
         
     userEmail = User.objects.get('email') # I am fetching Email from a different table to use it as an Fk in another table.
@@ -89,9 +91,11 @@ def IDVerification(request):
 def otherVerification(request):
     return render(request, "otherVerificationWays.html")
 
+
 def dashboard(request):
     #In Dashboard should display data from the DB
-    return render(request, "Dashboard.html")
+    data = User.objects.all()
+    return render(request, "Dashboard.html", {'data': data})
 
 def bookings(request):
     return render(request, "bookings.html")
