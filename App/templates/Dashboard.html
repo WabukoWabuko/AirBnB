@@ -1,80 +1,78 @@
 {% extends 'baseForAfterLogin.html' %}
 
-
 {% block title %}
     Dashboard
 {% endblock title %}
-    
 
-        
-        {% block mainContent %}
-            <!-- Main Content -->
-            <div class="col-md-10">
-                <!-- Header -->
-                <div class="dashboard-header d-flex justify-content-between align-items-center">
-                    <strong><h2>Welcome back, {{ data.fullName }}</h2></strong>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Hi, {{ data.fullName }}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">
-                                <i class="bi bi-person-circle"></i>
-                                Profile</a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                Logout</a></li>
-                        </ul>
+{% block mainContent %}
+    <!-- Main Content -->
+    {% if user.is_authenticated %}
+        <div class="col-md-10">
+            <!-- Header -->
+            <div class="dashboard-header d-flex justify-content-between align-items-center">
+                <strong><h2>Welcome back, {{ form.fullName }}</h2></strong>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi, {{ user.get_full_name }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'profile_page' %}">
+                            <i class="bi bi-person-circle"></i>
+                            Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Cards -->
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Welcome back, {{ user.get_full_name }}</h3>
+                            <p>Need help navigating the system? Use the menu on the left.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>Current Rentals</h6>
+                            <p>No active bookings found.</p>
+                            <img src="https://via.placeholder.com/150" alt="No Rentals" class="img-fluid">
+                        </div>
                     </div>
                 </div>
-    
-                <!-- Main Cards -->
-                <div class="row mt-4">
-                    <div class="col-md-8">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h3 class="card-title">Welcome back, [User]</h3>
-                                <p>Need help navigating the system? Use the menu on the left.</p>
-                            </div>
-                        </div>
-    
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h6>Current Rentals</h6>
-                                <p>No active bookings found.</p>
-                                <img src="https://via.placeholder.com/150" alt="No Rentals" class="img-fluid">
-                            </div>
+
+                <div class="col-md-4">
+                    <div class="card mb-4 card-blue">
+                        <div class="card-body text-white">
+                            <h4 class="card-title">Balance</h4>
+                            <p class="card-text">KES 0.00</p>
+                            <a href="#" class="btn btn-light">Pay Now</a>
                         </div>
                     </div>
-    
-                    <div class="col-md-4">
-                        <div class="card mb-4 card-blue">
-                            <div class="card-body text-white">
-                                <h4 class="card-title">Balance</h4>
-                                <p class="card-text">KES 0.00</p>
-                                <a href="#" class="btn btn-light">Pay Now</a>
-                            </div>
-                        </div>
 
-                        <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Your Info</h5>
-                                <p>Personal Information of the room occupier.</p>
-                                
-                            </div>
+                    <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Your Info</h5>
+                            <p>Personal Information of the room occupier.</p>
                         </div>
-    
-                        <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">House Info</h5>
-                                <p>Information of your House.</p>
-                                
-                            </div>
+                    </div>
+
+                    <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">House Info</h5>
+                            <p>Information of your House.</p>
                         </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-        {% endblock mainContent %}
+    {% else %}
+        <div class="text-center">
+            <p>You are not logged in. <a href="{% url 'login_page' %}">Login here</a>.</p>
+        </div>
+    {% endif %}
+{% endblock mainContent %}

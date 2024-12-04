@@ -4,11 +4,9 @@ from django.db import models
 class User(models.Model):
     email = models.EmailField(max_length=50, blank=False, null=False, unique=True)
     password = models.CharField(max_length=150)
-    fullName = models.CharField(max_length=150)
+    username = models.CharField(max_length=150)
     phone = models.CharField(max_length=13, blank=True, null=True)
     
-    def __str__(self):
-        return f"{self.full_name} - {self.email_address} - {self.phone}"
 
 # User Verification Model 
 class UserVerification(models.Model):

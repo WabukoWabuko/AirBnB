@@ -16,12 +16,12 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_method = "post"
+        self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Login", css_class="btn-primary w-100"))
 
 
 class SignupForm(forms.Form):
-    fullName = forms.CharField(
+    username = forms.CharField(
         label="Full Name",
         max_length=150,
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),

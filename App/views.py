@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User as bamdam
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
@@ -16,8 +17,8 @@ def Login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
@@ -36,14 +37,20 @@ def SignUp(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
+
+            if bamdam.objects.filter(email=form.cleaned_data.get('email')).exists():
+                messages.error(request, "An account with this email already exists.")
+                return redirect('signup_page')  # Prevent duplicate email
+
             password = form.cleaned_data.get('password')
             confirm_password = form.cleaned_data.get('confirm_password')
             if password == confirm_password:
-                User.objects.create_user(
-                    fullName=form.cleaned_data.get('fullName'),
+                user = bamdam.objects.create_user(
+                    username=form.cleaned_data.get('username'),
                     email=form.cleaned_data.get('email'),
                     password=password,
                 )
+                user.save()
                 messages.success(request, "Account created successfully!")
                 return redirect('login_page')
             else:
