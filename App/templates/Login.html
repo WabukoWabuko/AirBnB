@@ -1,4 +1,5 @@
 {% extends 'baseForLogins.html' %}
+{% load static crispy_forms_tags %}
 {% load static %}
 
     
@@ -28,42 +29,16 @@
     
 
 {% block body %}
-
-    <div class="container-fluid login-container d-flex justify-content-center align-items-center">
-        <div class="row w-50 p-4 bg-white rounded shadow">
-            <!-- <div class="col-12 text-center mb-4">
-                <img src="your-image.jpg" alt="AirBnB Logo" class="img-fluid">
-            </div> -->
-            <h2 class="text-center mb-4">Login</h2>
-            
-            <form method="POST">
-                <!-- Display messages
-                {% if messages %}
-                <div>
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-                {% endif %} -->
-
-                {% csrf_token %}
-                <div class="form-group mb-3">
-                    <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                </div>
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember me</label>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-            <div class="text-center mt-3">
-                <p>Don't have an account? <a href="{% url 'signup_page' %}">Sign up</a></p>
-            </div>
+<div class="container-fluid login-container d-flex justify-content-center align-items-center">
+    <div class="row w-50 p-4 bg-white rounded shadow">
+        <h2 class="text-center mb-4">Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+        </form>
+        <div class="text-center mt-3">
+            <p>Don't have an account? <a href="{% url 'signup_page' %}">Sign up</a></p>
         </div>
     </div>
+</div>
 {% endblock body %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
@@ -13,83 +14,80 @@ def Index(request):
 # Logging in to an already available account.
 def Login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        try:
-            # Query the database for the user with the provided email
-            user = User.objects.get(email=email)
-            
-            # Check if the provided password matches the hashed password in the DB
-            if password == user.password:
-                # Log the user in
-                messages.success(request, f'Welcome back, {user.fullName}!')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, email=email, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, "Welcome back!")
                 return redirect('dashboard_page')
             else:
-                messages.error(request, 'Invalid email or password.')
-        except User.DoesNotExist:
-            messages.error(request, 'Email does not exist')
+                messages.error(request, "Invalid email or password.")
+    else:
+        form = LoginForm()
+    return render(request, 'Login.html', {'form': form})
 
-    return render(request, 'Login.html')
 
 # Creating an account at this point
 def SignUp(request):
     # After clicking the button it should submit and go direct to verification page 
     if request.method == 'POST':
-        fullName = request.POST.get('fullName')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirmPassword = request.POST.get('confirmPassword')
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data.get('password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+            if password == confirm_password:
+                User.objects.create_user(
+                    fullName=form.cleaned_data.get('fullName'),
+                    email=form.cleaned_data.get('email'),
+                    password=password,
+                )
+                messages.success(request, "Account created successfully!")
+                return redirect('login_page')
+            else:
+                messages.error(request, "Passwords do not match.")
+    else:
+        form = SignupForm()
+    return render(request, 'SignUp.html', {'form': form})
 
-        if password != confirmPassword:
-            messages.error(request, 'Passwords do not match.')
-            return redirect('signup_page')
-
-        # if User.objects.filter(fullName=fullName).exists():
-        #     messages.error(request, 'Account already exists with this Name.')
-        #     return redirect('signup_page')
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already exists.')
-            return redirect('signup_page')
-
-        # Create the user
-        User.objects.create(fullName=fullName, email=email, password=password)
-        messages.success(request, 'Account created successfully. Please log in.')
-        return redirect('login_page') # Supposed to move to verification page
-    return render(request, "SignUp.html")
-
-# @permission_required
-# Should check on the email from the previous session being compared to the ones in DB before approval to access account
-#
 def IDVerification(request):
-    email = request.session.get('email') # This helps in retrieving data from the previous session
-    # user = User.objects.get(email=email)
-    
-    if email:
-        messages.success(request, f"Continue with registration")
-        return redirect('other_verification_ways_page')
-        
-    userEmail = User.objects.get('email') # I am fetching Email from a different table to use it as an Fk in another table.
-    # On submitting moves to page 2FA 
     if request.method == "POST":
-        phoneNumber = request.POST.get('phoneNumber')
-        idCard = request.FILES.get('idCard')
-        currentPhoto = request.FILES.get('currentPhoto')
-        
-        # Here is saving verification data linked to the user
-        UserVerification.objects.create(
-            userEmail=userEmail,
-            phoneNumber=phoneNumber,
-            idCard=idCard,
-            currentPhoto=currentPhoto
-        )
-        messages.success(request, "Verification successful! Fill the code sent to your email/Phone")
-        return redirect("other_verification_ways_page")
-    return render(request, "IDVerification.html", {'userEmail':userEmail})
+        form = IdentityVerificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process the form data (e.g., save files, validate, etc.)
+            phone_number = form.cleaned_data.get("phone_number")
+            id_card = form.cleaned_data.get("id_card")
+            current_photo = form.cleaned_data.get("current_photo")
+
+            # Add your verification logic here
+
+            messages.success(request, "Verification submitted successfully!")
+            return redirect("verification_success")  # Adjust as needed
+        else:
+            messages.error(request, "There was an error with your submission.")
+    else:
+        form = IdentityVerificationForm()
+    return render(request, "IDVerification.html", {"form": form})
+
 
 def otherVerification(request):
-    return render(request, "otherVerificationWays.html")
+    if request.method == "POST":
+        form = AuthenticationCodeForm(request.POST)
+        if form.is_valid():
+            verification_code = form.cleaned_data.get("verification_code")
+            
+            # Add logic to verify the code here
+            
+            messages.success(request, "Authentication successful!")
+            return redirect("success_page")  # Replace with the actual success URL
+        else:
+            messages.error(request, "Invalid verification code.")
+    else:
+        form = AuthenticationCodeForm()
+    return render(request, "otherVerificationWays.html", {"form": form})
+    
 
 
 def dashboard(request):

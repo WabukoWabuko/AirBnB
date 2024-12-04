@@ -1,4 +1,5 @@
 {% extends 'baseForLogins.html' %}
+{% load static crispy_forms_tags %}
 {% load static %}
 
     
@@ -27,54 +28,16 @@
 
     
     {% block body %}
-
-    {% if messages %}
-    <div>
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-        <div class="container-fluid signup-container d-flex justify-content-center align-items-center">
-            <div class="row w-50 p-4 bg-white rounded shadow">
-                <!-- <div class="col-12 text-center mb-4">
-                    <img src="your-image.jpg" alt="AirBnB Logo" class="img-fluid">
-                </div> -->
-                <h2 class="text-center mb-4">Create an Account</h2>
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- Full Name Field -->
-                    <div class="form-group mb-3">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full Name" required>
-                    </div>
-                    
-                    <!-- Email Field -->
-                    <div class="form-group mb-3">
-                        <label for="email">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
-                    </div>
-    
-                    <!-- Password Field -->
-                    <div class="form-group mb-3">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    </div>
-    
-                    <!-- Confirm Password Field -->
-                    <div class="form-group mb-3">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-                    </div>
-                    <!-- Link to Login -->
-                    <div class="text-center mt-3">
-                        <p>Already have an account? <a href="{% url 'login_page' %}">Login</a></p>
-                    </div>
-    
-                    <!-- Sign Up Button -->
-                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                </form>
+    <div class="container-fluid signup-container d-flex justify-content-center align-items-center">
+        <div class="row w-50 p-4 bg-white rounded shadow">
+            <h2 class="text-center mb-4">Create an Account</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </form>
+            <div class="text-center mt-3">
+                <p>Already have an account? <a href="{% url 'login_page' %}">Login</a></p>
             </div>
         </div>
+    </div>
     {% endblock body %}
