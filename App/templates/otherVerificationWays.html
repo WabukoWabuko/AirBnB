@@ -1,37 +1,38 @@
-{% extends 'baseForLogins.html' %}
-{% load static %}
 
+
+    {% extends 'baseForLogins.html' %}
+    {% load static crispy_forms_tags %}
+    {% load static %}
     
-    {% block title %}
-        Authentication
-    {% endblock title %}
         
-    
-    {% block style %}
-        <style>
-            /* Add your image path here */
-            .mfa-container {
-                background: url('{% static "images/Lock.png" %}') no-repeat center center fixed;
-                background-size: cover;
-                height: 100vh;
-            }
-            @media (max-width: 768px) {
+        {% block title %}
+            Authentication
+        {% endblock title %}
+            
+        
+        {% block style %}
+            <style>
+                /* Add your image path here */
                 .mfa-container {
                     background: url('{% static "images/Lock.png" %}') no-repeat center center fixed;
                     background-size: cover;
+                    height: 100vh;
                 }
-            }
-        </style>
-    {% endblock style %}
-        
-
+                @media (max-width: 768px) {
+                    .mfa-container {
+                        background: url('{% static "images/Lock.png" %}') no-repeat center center fixed;
+                        background-size: cover;
+                    }
+                }
+            </style>
+        {% endblock style %}
+            
     
-    {% block body %}
+        
+        {% block body %}
         <div class="container-fluid mfa-container d-flex justify-content-center align-items-center">
             <div class="row w-50 p-4 bg-white rounded shadow">
-                <!-- Back and Other Ways Buttons -->
                 <div class="d-flex justify-content-between mb-4">
-                    <!-- Back Button -->
                     <a href="javascript:history.back()" class="btn btn-outline-secondary">
                         &larr; Back
                     </a>
@@ -39,20 +40,13 @@
                 <h2 class="text-center mb-4">Verify Your Identity</h2>
                 <p class="text-center">Enter the code we sent to your email or phone number to continue.</p>
                 <form method="POST">
-                    <!-- Verification Code Field -->
-                    <div class="form-group mb-3">
-                        <label for="verificationCode">Verification Code</label>
-                        <input type="text" class="form-control" id="verificationCode" name="verificationCode" maxlength="6" placeholder="Enter code" required>
-                    </div>
-    
-                    <!-- Submit Button -->
+                    {% csrf_token %}
+                    {{ form|crispy }}
                     <button type="submit" class="btn btn-primary w-100">Verify</button>
                 </form>
-                
-                <!-- Resend Code Option -->
                 <div class="text-center mt-3">
                     <p>Didn't receive a code? <a href="#">Resend Code</a></p>
                 </div>
             </div>
         </div>
-    {% endblock body %}
+        {% endblock body %}
