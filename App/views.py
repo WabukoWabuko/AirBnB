@@ -30,6 +30,12 @@ def Login(request):
         form = LoginForm()
     return render(request, 'Login.html', {'form': form})
 
+def Logout(request):
+    logout(request)
+
+    messages.success(request, "You have successfully logged out.")
+
+    return redirect('login_page')  # Change this to the appropriate page
 
 # Creating an account at this point
 def SignUp(request):
