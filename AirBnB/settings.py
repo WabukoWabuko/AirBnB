@@ -66,16 +66,24 @@ WSGI_APPLICATION = 'AirBnB.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME':    'AirBnB',
+#         'USER':   'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '3307',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME':    'AirBnB',
-        'USER':   'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3307',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Default SQLite file in your project directory
     }
 }
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 

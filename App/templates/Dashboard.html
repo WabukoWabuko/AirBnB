@@ -10,16 +10,16 @@
         <div class="col-md-10">
             <!-- Header -->
             <div class="dashboard-header d-flex justify-content-between align-items-center">
-                <strong><h2>Welcome back, {{ form.fullName }}</h2></strong>
+                <strong><h2>Welcome back, {{ form.username }}</h2></strong>
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Hi, {{ user.get_full_name }}
+                        Hi, {{ form.username }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'profile_page' %}">
+                        <li><a class="dropdown-item" href="">
                             <i class="bi bi-person-circle"></i>
                             Profile</a></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">
+                        <li><a class="dropdown-item" href="">
                             <i class="bi bi-box-arrow-right"></i>
                             Logout</a></li>
                     </ul>

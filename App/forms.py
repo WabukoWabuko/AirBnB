@@ -1,6 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from .models import *
 
 class LoginForm(forms.Form):
     email = forms.EmailField(
@@ -18,9 +19,13 @@ class LoginForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "POST"
         self.helper.add_input(Submit("submit", "Login", css_class="btn-primary w-100"))
+    
+    class Meta:
+        model = User
+        fields = ['email', 'password']
 
 
-class SignupForm(forms.Form):
+class SignupForm(forms.ModelForm):
     username = forms.CharField(
         label="Full Name",
         max_length=150,
@@ -44,6 +49,10 @@ class SignupForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Sign Up", css_class="btn-primary w-100"))
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
 
 class MFAForm(forms.Form):
     verification_code = forms.CharField(

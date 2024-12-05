@@ -17,12 +17,12 @@ def Login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                messages.success(request, "Welcome back!")
+                messages.success(request, f"Welcome back! {user.username}")
                 return redirect('dashboard_page')
             else:
                 messages.error(request, "Invalid email or password.")
@@ -39,8 +39,8 @@ def SignUp(request):
         if form.is_valid():
 
             if bamdam.objects.filter(email=form.cleaned_data.get('email')).exists():
-                messages.error(request, "An account with this email already exists.")
-                return redirect('signup_page')  # Prevent duplicate email
+                    messages.error(request, "An account with this email already exists.")
+                    return redirect('signup_page')  # Prevent duplicate email
 
             password = form.cleaned_data.get('password')
             confirm_password = form.cleaned_data.get('confirm_password')
@@ -50,9 +50,16 @@ def SignUp(request):
                     email=form.cleaned_data.get('email'),
                     password=password,
                 )
-                user.save()
+                
+                user.set_password(password)
+                try:
+                    user.save()
+                except Exception as e:
+                    messages.error(request, f"An error occurred: {e}")
+                    return redirect('signup_page')
+                form.save()
                 messages.success(request, "Account created successfully!")
-                return redirect('login_page')
+                return redirect('dashboard_page')
             else:
                 messages.error(request, "Passwords do not match.")
     else:
