@@ -1,3 +1,6 @@
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User as bamdam
 from .forms import *
@@ -11,6 +14,21 @@ from .models import * # Which are Booking, User, UserVerification, Listing, Amen
 # Leading to Home/Index page as my landing page.
 def Index(request):
     return render(request, "index.html")
+
+
+@csrf_exempt
+def emergency_alert(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        keyword = data.get('keyword')
+        timestamp = data.get('timestamp')
+
+        # Log or notify relevant personnel (e.g., send SMS/email)
+        print(f"Emergency Alert! Keyword: {keyword}, Timestamp: {timestamp}")
+
+        return JsonResponse({'status': 'Success', 'message': 'Alert received and processed.'})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 # Logging in to an already available account.
 def Login(request):

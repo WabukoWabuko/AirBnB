@@ -22,39 +22,7 @@
                 background-size: cover;
             }
         }
-        #message-container {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        }
-
-        .alert {
-        padding: 10px;
-        margin: 5px;
-        border-radius: 5px;
-        font-size: 16px;
-        width: 300px;  /* You can adjust the width */
-        display: inline-block;
-        animation: fadeIn 0.5s ease-out;
-        }
-
-        .alert-success {
-        background-color: #28a745; /* Green for success */
-        color: white;
-        }
-
-        .alert-danger {
-        background-color: #dc3545; /* Red for error */
-        color: white;
-        }
-
-        /* Optional fade-in animation */
-        @keyframes fadeIn {
-        0% { opacity: 0; }
-        100% { opacity: 1; }
-        }
-
+        
     </style>
     {% endblock style %}
         
@@ -62,28 +30,6 @@
     
 
 {% block body %}
-
-{% if messages %}
-  <div id="message-container">
-    {% for message in messages %}
-      <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" id="message-box">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-
-  <script type="text/javascript">
-    // Wait 2 seconds and then hide the message
-    setTimeout(function() {
-      const messageBox = document.getElementById('message-box');
-      if (messageBox) {
-        messageBox.style.display = 'none';
-      }
-    }, 3000); // Message disappears after 3 seconds (3000 ms)
-  </script>
-{% endif %}
-
-
 <div class="container-fluid login-container d-flex justify-content-center align-items-center">
     <div class="row w-50 p-4 bg-white rounded shadow">
         <h2 class="text-center mb-4">Login</h2>

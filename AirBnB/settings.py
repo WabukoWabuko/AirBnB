@@ -132,3 +132,14 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from google.cloud import speech_v1p1beta1 as speech
+def transcribe_audio(audio_content):
+    client = speech.SpeechClient()
+    audio = speech.RecognitionAudio(content=audio_content)
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+        language_code="en-US",
+    )
+    response = client.recognize(config=config, audio=audio)
+    return [result.alternatives[0].transcript for result in response.results]

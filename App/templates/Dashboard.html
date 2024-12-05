@@ -1,4 +1,5 @@
 {% extends 'baseForAfterLogin.html' %}
+{% load static %}
 
 {% block title %}
     Dashboard
@@ -10,71 +11,86 @@
         <div class="col-md-10">
             <!-- Header -->
             <div class="dashboard-header d-flex justify-content-between align-items-center">
-                <strong><h2>Welcome back, {{ user.username }}</h2></strong>
+                <h2 class="text-primary">Welcome back, {{ user.username.title }}</h2>
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Hi, {{ user.username }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="">
-                            <i class="bi bi-person-circle"></i>
-                            Profile</a></li>
+                        <li><a class="dropdown-item" href="#">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a></li>
                         <li><a class="dropdown-item" href="{% url 'logout_page' %}">
-                            <i class="bi bi-box-arrow-right"></i>
-                            Logout</a></li>
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a></li>
                     </ul>
                 </div>
             </div>
 
             <!-- Main Cards -->
             <div class="row mt-4">
+                <!-- Left Column -->
                 <div class="col-md-8">
-                    <div class="card mb-4">
+                    <!-- Welcome Card -->
+                    <div class="card mb-4 border-primary">
                         <div class="card-body">
-                            <h3 class="card-title">Welcome back, {{ user.username }}</h3>
-                            <p>Need help navigating the system? Use the menu on the left.</p>
-                            <p>Thank you for visiting our Bed and Breakfast.</p>
+                            <h3 class="card-title">Welcome, {{ user.username }}!</h3>
+                            <p>Use the menu on the left to navigate the system. Thank you for visiting our Bed and Breakfast.</p>
                         </div>
                     </div>
 
+                    <!-- Current Rentals -->
                     <div class="card">
                         <div class="card-body text-center">
-                            <h6>Current Rentals</h6>
-                            <p>No active bookings found.</p>
-                            <img src="https://via.placeholder.com/150" alt="No Rentals" class="img-fluid">
+                            <h5 class="text-muted">Current Rentals</h5>
+                            <img src="https://mansiondeal.com/public/uploads/12421432dshdsbhjbd63443867348.webp" alt="No Rentals" class="img-fluid">
                         </div>
                     </div>
                 </div>
 
+                <!-- Right Column -->
                 <div class="col-md-4">
-                    <div class="card mb-4 card-blue">
-                        <div class="card-body text-white">
+                    <!-- Balance Card -->
+                    <div class="card mb-4 text-white bg-primary">
+                        <div class="card-body text-center">
                             <h4 class="card-title">Balance</h4>
                             <p class="card-text">KES 0.00</p>
-                            <a href="#" class="btn btn-light">Pay Now</a>
+                            <a href="{% url 'payments_page' %}" class="btn btn-light">Pay Now</a>
                         </div>
                     </div>
 
-                    <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
+                    <!-- User Info Card -->
+                    <div class="card mb-4">
                         <div class="card-body text-center">
                             <h5 class="card-title">Your Info</h5>
-                            <p>{{ user.email }}</p>
-                            <p>{{ user.phone }}</p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                            <p><strong>Phone:</strong> {{ user.phone|default:"Not provided" }}</p>
                         </div>
                     </div>
 
-                    <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
+                    <!-- House Info Card
+                    <div class="card">
                         <div class="card-body text-center">
                             <h5 class="card-title">House Info</h5>
-                            <p>Information of your House.</p>
+                            <p>Details about your house will appear here.</p>
+                        </div>
+                    </div> -->
+
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Emergency Alert System</h5>
+                            <button id="emergencyButton" class="btn btn-danger">Enable Emergency Detection</button>
+                            <p class="text-muted mt-2">Click to enable mergency detection.</p>
                         </div>
                     </div>
+                    <script src="{% static 'js/emergencyDetection.js' %}"></script>
+                    
                 </div>
             </div>
         </div>
     {% else %}
         <div class="text-center">
-            <p>You are not logged in. <a href="{% url 'login_page' %}">Login here</a>.</p>
+            <p>You are not logged in. <a href="{% url 'login_page' %}" class="text-primary">Login here</a>.</p>
         </div>
     {% endif %}
 {% endblock mainContent %}
