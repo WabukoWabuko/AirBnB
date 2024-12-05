@@ -73,7 +73,7 @@ class MFAForm(forms.Form):
         self.helper.form_method = "post"
         self.helper.add_input(Submit("submit", "Verify", css_class="btn-primary w-100"))
 
-class IdentityVerificationForm(forms.Form):
+class IdentityVerificationForm(forms.ModelForm):
     phone_number = forms.CharField(
         label="Phone Number",
         max_length=15,
@@ -102,6 +102,10 @@ class IdentityVerificationForm(forms.Form):
             }
         ),
     )
+
+    class Meta:
+        model = User
+        fields = ['phone_number', 'id_card', 'current_photo']
     
 class AuthenticationCodeForm(forms.Form):
     verification_code = forms.CharField(

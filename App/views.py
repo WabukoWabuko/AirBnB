@@ -59,7 +59,7 @@ def SignUp(request):
                     return redirect('signup_page')
                 form.save()
                 messages.success(request, "Account created successfully!")
-                return redirect('dashboard_page')
+                return redirect('id_verification_page')
             else:
                 messages.error(request, "Passwords do not match.")
     else:
@@ -71,14 +71,23 @@ def IDVerification(request):
         form = IdentityVerificationForm(request.POST, request.FILES)
         if form.is_valid():
             # Process the form data (e.g., save files, validate, etc.)
-            phone_number = form.cleaned_data.get("phone_number")
-            id_card = form.cleaned_data.get("id_card")
-            current_photo = form.cleaned_data.get("current_photo")
+            phone = form.cleaned_data.get("phone_number")
+            id_document = form.cleaned_data.get("id_card")
+            photo = form.cleaned_data.get("current_photo")
 
             # Add your verification logic here
+            
+            # Saving the verification details related to the logged-in user
+            verification_record = form.save(commit=False) # When True, commit to the DB else not
+            verification_record.save()
+
+             # Get the logged-in user's email
+            user_email = request.user.email
+            #verification_record.email = user_email  # Associate with the logged-in user's email
+            
 
             messages.success(request, "Verification submitted successfully!")
-            return redirect("verification_success")  # Adjust as needed
+            return redirect("login_page")  # Adjust as needed
         else:
             messages.error(request, "There was an error with your submission.")
     else:
@@ -103,7 +112,7 @@ def otherVerification(request):
     return render(request, "otherVerificationWays.html", {"form": form})
     
 
-
+@login_required
 def dashboard(request):
     #In Dashboard should display data from the DB
     data = User.objects.all()
