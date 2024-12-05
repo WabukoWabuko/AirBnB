@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-    {% block title %}
-        
-    {% endblock title %}
-        </title>
+    <title>{% block title %}   {% endblock title %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -17,11 +13,6 @@
             color: white;
             padding-top: 20px;
         }
-
-        /* #SessionProgress {
-            background-color: gray;
-            border: 1px solid #181b20;
-        } */
 
         .sidebar a {
             color: white;
@@ -33,25 +24,6 @@
 
         .sidebar a:hover {
             background-color: #0056b3;
-        }
-
-        .dashboard-header {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .card-blue {
-            background-color: #0066ff;
-            color: white;
-        }
-
-        .card-icon {
-            font-size: 2rem;
-        }
-
-        .progress-bar {
-            background-color: #0066ff;
         }
 
         footer {
@@ -69,25 +41,27 @@
             <div class="col-md-2 sidebar">
                 <h4 class="text-center">MENU</h4>
                 <nav>
-                    <a href="#">Dashboard</a>
-                    <a href="#">Bookings</a>
-                    <a href="#">Messages</a>
-                    <a href="#">Listings</a>
-                    <a href="#">Payments</a>
-                    <a href="#">Support</a>
-                    <a href="#">Feedback</a>
-                    <a href="#">FAQs</a>
+                    <a href="{% url 'dashboard_page' %}">Dashboard</a>
+                    <a href="{% url 'bookings_page' %}">Bookings</a>
+                    <a href="{% url 'messages_page' %}">Messages</a>
+                    <a href="{% url 'listings_page' %}">Listings</a>
+                    <a href="{% url 'payments_page' %}">Payments</a>
+                    <a href="{% url 'support_page' %}">Support</a>
+                    <a href="{% url 'feedback_page' %}">Feedback</a>
+                    <a href="{% url 'faq_page' %}">FAQs</a>
                 </nav>
                 <footer class="mt-auto">
                     <p>©2024 - WabukoWabuko Softwares</p>
                 </footer>
             </div>
 
-            
-            {% block mainContent %}
-                
-            {% endblock mainContent %}
-                
+            <!-- Main Content -->
+            <div class="col-md-10">
+                {% block mainContent %}
+                {% endblock mainContent %}
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

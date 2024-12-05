@@ -31,8 +31,9 @@
                 <div class="col-md-8">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h3 class="card-title">Welcome back, {{ user.get_full_name }}</h3>
+                            <h3 class="card-title">Welcome back, {{ user.username }}</h3>
                             <p>Need help navigating the system? Use the menu on the left.</p>
+                            <p>Thank you for visiting our Bed and Breakfast.</p>
                         </div>
                     </div>
 
@@ -57,7 +58,8 @@
                     <div class="card mb-4 card shadow hh p-1 yhigh" id="SessionProgress">
                         <div class="card-body text-center">
                             <h5 class="card-title">Your Info</h5>
-                            <p>Personal Information of the room occupier.</p>
+                            <p>{{ user.email }}</p>
+                            <p>{{ user.phone }}</p>
                         </div>
                     </div>
 
