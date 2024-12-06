@@ -152,10 +152,11 @@ def otherVerification(request):
 def dashboard(request):
     #In Dashboard should display data from the DB
     data = User.objects.all()
-    return render(request, "Dashboard.html", {'data': data})
+    return render(request, "Dashboard.html", {'data': data,})
 
 def bookings(request):
-    return render(request, "bookings.html")
+    dataBookings = Booking.objects.all()
+    return render(request, "bookings.html", {'dataBookings': dataBookings})
 
 def faq(request):
     return render(request, "faq.html")
@@ -177,3 +178,4 @@ def support(request):
 
 def makeBooking(request):
     return render(request, "makeBooking.html")
+    
