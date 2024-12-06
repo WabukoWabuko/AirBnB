@@ -109,3 +109,10 @@ class Discount(models.Model):
     percentage = models.DecimalField(max_digits=5, decimal_places=2)
     valid_from = models.DateField()
     valid_until = models.DateField()
+
+class Emergency(models.Model):
+    keyword = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    timestamp = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)

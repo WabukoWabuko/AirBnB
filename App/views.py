@@ -17,17 +17,29 @@ def Index(request):
 
 
 @csrf_exempt
-def emergency_alert(request):
+def report_emergency(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        keyword = data.get('keyword')
-        timestamp = data.get('timestamp')
+        try:
+            data = json.loads(request.body)
+            keyword = data.get('keyword', '')
+            location = data.get('location', {})
+            timestamp = data.get('timestamp', '')
 
-        # Log or notify relevant personnel (e.g., send SMS/email)
-        print(f"Emergency Alert! Keyword: {keyword}, Timestamp: {timestamp}")
+            # Log or process the data
+            print("Emergency Detected:")
+            print(f"Keyword: {keyword}")
+            print(f"Location: {location}")
+            print(f"Timestamp: {timestamp}")
 
-        return JsonResponse({'status': 'Success', 'message': 'Alert received and processed.'})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+            # Optional: Save to database
+            messages.error(request, f"{keyword} - {location} - {timestamp}")
+            # Emergency.objects.create(keyword=keyword, latitude=location['latitude'], longitude=location['longitude'], timestamp=timestamp)
+
+            return JsonResponse({'status': 'success', 'message': 'Emergency reported!'})
+        except Exception as e:
+            print("Error processing emergency data: ", e)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
 
 # Logging in to an already available account.

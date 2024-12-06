@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from . import views
-from .views import emergency_alert
+# from .views import emergency_alert
 
 urlpatterns = [
     
@@ -21,5 +21,6 @@ urlpatterns = [
     path('payments/', views.payments, name="payments_page"),
     path('support/', views.support, name="support_page"),
     path('makeBooking/', views.makeBooking, name="make_booking_page"),
-    path('api/emergency-alert/', emergency_alert, name='emergency_alert'),
+    # path('api/emergency-alert/', emergency_alert, name='emergency_alert'),
+    path('emergency/', views.report_emergency, name='report_emergency'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
