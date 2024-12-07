@@ -152,7 +152,15 @@ def otherVerification(request):
 def dashboard(request):
     #In Dashboard should display data from the DB
     data = User.objects.all()
-    return render(request, "Dashboard.html", {'data': data,})
+    user = request.user
+    try:
+        verification = UserVerification.objects.get(email=user.id)
+        profile_picture = verification.photo.url if verification.photo else None
+    except UserVerification.DoesNotExist:
+        profile_picture = None
+    return render(request, "Dashboard.html", {'data': data,
+                                              'user': user,
+                                              'profile_picture': profile_picture})
 
 @login_required
 def bookings(request):
@@ -242,3 +250,45 @@ def compose_message(request):
             messages.error(request, "Recipient does not exist.")
         return redirect('messages_page')
 
+
+@login_required
+def profile(request):
+    user = request.user  # Get the logged-in user
+    verification = UserVerification.objects.filter(email=user.id).first()  # Get verification data
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        photo = request.FILES.get('photo')
+        
+        # Update user details
+        user.username = username
+        user.phone = phone
+        user.email = email
+        
+        try:
+            user.save()  # Save changes to the User table
+            
+            # Optionally update the photo in UserVerification
+            if photo and verification:
+                verification.photo = photo
+                verification.save()
+            
+            messages.success(request, "Profile updated successfully!")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {e}")
+        return redirect('profile_page')  # Redirect back to the profile page
+    
+    context = {
+        'user': user,
+        'photo': verification.photo.url if verification and verification.photo else None,  # Profile picture
+    }
+    return render(request, 'profile.html', context)
+
+@login_required
+def delete_account(request):
+    user = request.user
+    user.delete()  # Delete the account
+    messages.success(request, "Your account has been deleted.")
+    return redirect('login_page')  # Redirect to the home or login page

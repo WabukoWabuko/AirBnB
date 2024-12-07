@@ -26,4 +26,6 @@ urlpatterns = [
     path('delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
     path('compose_message/', views.compose_message, name='compose_message'),
     path('cancel_booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
+    path('profile/', views.profile, name='profile_page'),
+    path('delete_account/', views.delete_account, name='delete_account'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

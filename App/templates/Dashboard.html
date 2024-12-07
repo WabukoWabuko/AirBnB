@@ -11,13 +11,13 @@
         <div class="col-md-10">
             <!-- Header -->
             <div class="dashboard-header d-flex justify-content-between align-items-center">
-                <h2 class="text-primary">Welcome back, {{ user.username.title }}</h2>
+                <h2 class="text-primary">Welcome to <strong>SalamaBnB</strong></h2>
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Hi, {{ user.username }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item" href="{% url 'profile_page' %}">
                             <i class="bi bi-person-circle"></i> Profile
                         </a></li>
                         <li><a class="dropdown-item" href="{% url 'logout_page' %}">
@@ -34,7 +34,7 @@
                     <!-- Welcome Card -->
                     <div class="card mb-4 border-primary">
                         <div class="card-body">
-                            <h3 class="card-title">Welcome, {{ user.username }}!</h3>
+                            <h3 class="card-title">Welcome, <strong>{{ user.username }}</strong>!</h3>
                             <p>Use the menu on the left to navigate the system. Thank you for visiting our Bed and Breakfast.</p>
                         </div>
                     </div>
@@ -76,12 +76,14 @@
                         </div>
                     </div> -->
 
-                    <div class="text-center my-3">
-                        <button id="emergencyBtn" class="btn btn-danger">
-                            Emergency Assistance
-                        </button>
+                    <div class="card mb-4">
+                        <div class="text-center my-3">
+                            <button id="emergencyBtn" class="btn btn-danger">
+                                Emergency Assistance
+                            </button>
+                        </div>
+                        <div id="statusMessage" class="alert alert-info mt-3" style="display: none;"></div>
                     </div>
-                    <div id="statusMessage" class="alert alert-info mt-3" style="display: none;"></div>
                     
                     <!-- JS works over here for sound recognition -->
                     <script>

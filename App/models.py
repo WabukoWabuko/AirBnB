@@ -5,7 +5,7 @@ class User(models.Model):
     email = models.EmailField(max_length=50, blank=False, null=False, unique=True)
     password = models.CharField(max_length=150)
     username = models.CharField(max_length=150)
-    phone = models.CharField(max_length=13, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     
 
 # User Verification Model 
