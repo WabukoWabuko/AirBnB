@@ -45,6 +45,16 @@ class Booking(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'listing': self.listing.title,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'payment_status': self.payment.status,
+            'total_price': str(self.total_price),
+        }
+
 # Payment Model
 class Payment(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='payment')

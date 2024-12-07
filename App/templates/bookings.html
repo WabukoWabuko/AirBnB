@@ -19,30 +19,56 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>BK001</td>
-                    <td>Modern Apartment</td>
-                    <td>2024-12-01</td>
-                    <td>2024-12-10</td>
-                    <td><span class="badge bg-success">Confirmed</span></td>
-                    <td>
-                        <a href="#" class="btn btn-primary btn-sm">View</a>
-                        <a href="#" class="btn btn-danger btn-sm">Cancel</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>BK002</td>
-                    <td>Beach House</td>
-                    <td>2024-12-05</td>
-                    <td>2024-12-15</td>
-                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    <td>
-                        <a href="#" class="btn btn-primary btn-sm">View</a>
-                        <a href="#" class="btn btn-danger btn-sm">Cancel</a>
-                    </td>
-                </tr>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.listing.title }}</td>
+                        <td>{{ booking.start_date }}</td>
+                        <td>{{ booking.end_date }}</td>
+                        <td>
+                            {% if booking.payment.status == "Completed" %}
+                                <span class="badge bg-success">Confirmed</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewBookingModal{{ booking.id }}">View</button>
+                            <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm">Cancel</a>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
         <a href="{% url 'make_booking_page' %}" class="btn btn-success">Make a New Booking</a>
     </div>
+
+    <!-- Booking Details Modal -->
+    {% for booking in bookings %}
+        <div class="modal fade" id="viewBookingModal{{ booking.id }}" tabindex="-1" aria-labelledby="viewBookingModalLabel{{ booking.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewBookingModalLabel{{ booking.id }}">Booking Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Property:</strong> {{ booking.listing.title }}</p>
+                        <p><strong>Check-in:</strong> {{ booking.start_date }}</p>
+                        <p><strong>Check-out:</strong> {{ booking.end_date }}</p>
+                        <p><strong>Status:</strong> 
+                            {% if booking.payment.status == "Completed" %}
+                                Confirmed
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock mainContent %}

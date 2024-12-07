@@ -8,12 +8,13 @@
     <div class="container my-5">
         <h1 class="mb-4">Messages</h1>
         
+        <!-- Messages List -->
         <div class="list-group">
             {% for message in dataMessages %}
             <div class="list-group-item list-group-item-action position-relative">
                 <h5 class="mb-1">From <strong>{{ message.sender.username }}</strong> to <strong>{{ message.receiver.username }}</strong></h5>
                 <p class="mb-1 text-muted">{{ message.content }}</p>
-                <small>Sent at: {{ message.created_at }}</small>
+                <small>Sent on: {{ message.created_at }}</small>
                 
                 <!-- Delete button (hidden by default) -->
                 <form action="{% url 'delete_message' message.id %}" method="POST" class="delete-form position-absolute top-0 end-0">
@@ -24,7 +25,43 @@
             {% endfor %}
         </div>
         
-        <a href="#" class="btn btn-primary mt-4">Compose a New Message</a>
+        <!-- Compose Message Button -->
+        <button class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#composeMessageModal">Compose a New Message</button>
+    </div>
+
+    <!-- Compose Message Modal -->
+    <div class="modal fade" id="composeMessageModal" tabindex="-1" aria-labelledby="composeMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'compose_message' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="composeMessageModalLabel">Compose New Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Recipient -->
+                        <div class="mb-3">
+                            <label for="receiver" class="form-label">Recipient</label>
+                            <select id="receiver" name="receiver" class="form-select" required>
+                                {% for user in dataMessages %}
+                                <option value="{{ user.receiver.id }}">{{ user.receiver.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Message Content -->
+                        <div class="mb-3">
+                            <label for="messageContent" class="form-label">Message</label>
+                            <textarea id="messageContent" name="content" class="form-control" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <style>

@@ -1,0 +1,17 @@
+{% extends 'baseForAfterLogin.html' %}
+
+{% block title %}
+    Cancel Booking
+{% endblock title %}
+
+{% block mainContent %}
+    <div class="container my-5">
+        <h1 class="mb-4">Cancel Booking</h1>
+        <p>Are you sure you want to cancel the booking for the property: {{ booking.listing.title }}?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+            <a href="{% url 'bookings_page' %}" class="btn btn-secondary">No, Go Back</a>
+        </form>
+    </div>
+{% endblock mainContent %}

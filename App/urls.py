@@ -24,4 +24,6 @@ urlpatterns = [
     # path('api/emergency-alert/', emergency_alert, name='emergency_alert'),
     path('emergency/', views.report_emergency, name='report_emergency'),
     path('delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
+    path('compose_message/', views.compose_message, name='compose_message'),
+    path('cancel_booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

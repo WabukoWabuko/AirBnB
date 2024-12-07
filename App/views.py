@@ -154,9 +154,45 @@ def dashboard(request):
     data = User.objects.all()
     return render(request, "Dashboard.html", {'data': data,})
 
+@login_required
 def bookings(request):
-    dataBookings = Booking.objects.all()
-    return render(request, "bookings.html", {'dataBookings': dataBookings})
+    if request.user.is_authenticated:
+        # Fetch all bookings for the logged-in user
+        bookings = Booking.objects.filter(guest=request.user.id)
+    else:
+        # Handle the case where the user is not authenticated (optional)
+        bookings = []
+
+    # Pass bookings data to the template
+    context = {
+        'bookings': bookings
+    }
+
+    return render(request, 'bookings.html', context)
+
+@login_required
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    # Prompt confirmation for cancellation
+    if request.method == 'POST':
+        booking.delete()  # Delete the booking
+        messages.success(request, "Booking has been cancelled successfully.")
+        return redirect('bookings_page')
+    
+    return render(request, 'cancel_confirmation.html', {'booking': booking})
+
+@login_required
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, guest=request.user.id)
+
+    if request.method == 'POST':
+        booking.delete()  # Delete the booking
+
+        messages.success(request, "Your booking has been cancelled successfully.")
+        return redirect('bookings_page')
+
+    return render(request, 'cancel_confirmation.html', {'booking': booking})
 
 def faq(request):
     return render(request, "faq.html")
@@ -188,3 +224,21 @@ def support(request):
 def makeBooking(request):
     return render(request, "makeBooking.html")
     
+from django.contrib.auth import get_user_model
+User = get_user_model()
+def compose_message(request):
+    if request.method == "POST":
+        sender = request.user  # Assumes the user is authenticated
+        receiver_id = request.POST.get('receiver')
+        content = request.POST.get('content')
+        
+        print(f"Receiver ID: {receiver_id}")  # Debugging step
+
+        try:
+            receiver = User.objects.get(id=receiver_id)
+            Message.objects.create(sender=sender, receiver=receiver, content=content)
+            messages.success(request, "Message sent successfully!")
+        except User.DoesNotExist:
+            messages.error(request, "Recipient does not exist.")
+        return redirect('messages_page')
+
