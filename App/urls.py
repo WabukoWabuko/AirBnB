@@ -23,4 +23,5 @@ urlpatterns = [
     path('makeBooking/', views.makeBooking, name="make_booking_page"),
     # path('api/emergency-alert/', emergency_alert, name='emergency_alert'),
     path('emergency/', views.report_emergency, name='report_emergency'),
+    path('delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User as bamdam
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -168,6 +168,15 @@ def listings(request):
     return render(request, "listings.html")
 
 def messagesM(request):
+    dataMessages = Message.objects.all()
+    return render(request, "messagesM.html", {'dataMessages': dataMessages})
+
+def delete_message(request, message_id):
+    if request.method == "POST":
+        message = get_object_or_404(Message, id=message_id)
+        message.delete()
+        messages.success(request, "Message deleted successfully.")
+        return redirect('messages_page')
     return render(request, "messagesM.html")
 
 def payments(request):

@@ -7,18 +7,37 @@
 {% block mainContent %}
     <div class="container my-5">
         <h1 class="mb-4">Messages</h1>
+        
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
-                <h5 class="mb-1">Host: John Doe</h5>
-                <p class="mb-1 text-muted">Hello, I would like to confirm your booking...</p>
-                <small>3 hours ago</small>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-                <h5 class="mb-1">Guest: Jane Smith</h5>
-                <p class="mb-1 text-muted">Can I check in earlier on Sunday?</p>
-                <small>1 day ago</small>
-            </a>
+            {% for message in dataMessages %}
+            <div class="list-group-item list-group-item-action position-relative">
+                <h5 class="mb-1">From <strong>{{ message.sender.username }}</strong> to <strong>{{ message.receiver.username }}</strong></h5>
+                <p class="mb-1 text-muted">{{ message.content }}</p>
+                <small>Sent at: {{ message.created_at }}</small>
+                
+                <!-- Delete button (hidden by default) -->
+                <form action="{% url 'delete_message' message.id %}" method="POST" class="delete-form position-absolute top-0 end-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
         </div>
+        
         <a href="#" class="btn btn-primary mt-4">Compose a New Message</a>
     </div>
+
+    <style>
+        .list-group-item {
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-form {
+            display: none;
+        }
+
+        .list-group-item:hover .delete-form {
+            display: block;
+        }
+    </style>
 {% endblock mainContent %}
