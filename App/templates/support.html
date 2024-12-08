@@ -11,14 +11,15 @@
             <!-- Contact Support Form -->
             <div class="col-md-6">
                 <h4>Contact Support</h4>
-                <form>
+                <form method="POST" action="{% url 'support_page' %}">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
                     </div>
                     <div class="mb-3">
                         <label for="issue" class="form-label">Describe Your Issue</label>
-                        <textarea id="issue" class="form-control" rows="5" placeholder="Explain the issue in detail"></textarea>
+                        <textarea id="issue" name="issue" class="form-control" rows="5" placeholder="Explain the issue in detail" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

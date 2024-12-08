@@ -219,7 +219,7 @@ def make_booking(request):
         return redirect('bookings_page')
     return redirect('listings_page')
 
-
+@login_required
 def faq(request):
     return render(request, "faq.html")
 
@@ -249,10 +249,12 @@ def listings(request):
     listings = Listing.objects.all()  # Get all listings from the database
     return render(request, 'listings.html', {'listings': listings})
 
+@login_required
 def messagesM(request):
     dataMessages = Message.objects.all()
     return render(request, "messagesM.html", {'dataMessages': dataMessages})
 
+@login_required
 def delete_message(request, message_id):
     if request.method == "POST":
         message = get_object_or_404(Message, id=message_id)
@@ -261,6 +263,7 @@ def delete_message(request, message_id):
         return redirect('messages_page')
     return render(request, "messagesM.html")
 
+@login_required
 def payments(request):
     user = request.user
 
@@ -291,7 +294,29 @@ def payments(request):
         'payments': payments,
     })
 
+@login_required
 def support(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        issue = request.POST.get('issue')
+
+        # Ensure a user is logged in, and associate the ticket with the user
+        user = User.objects.get(pk=request.user.pk) # Fetching user direct
+
+        # Create the support ticket in the database
+        ticket = SupportTicket.objects.create(
+            user=user,
+            subject=f"Support request from {email}",
+            description=issue,
+            status="open"
+        )
+
+        # Optionally, provide feedback to the user about ticket creation
+        messages.success(request, "Your support ticket has been submitted successfully. Our team will get back to you shortly.")
+        
+        # Redirect to the support page after submission
+        return redirect('support_page')
+
     return render(request, "support.html")
 
     

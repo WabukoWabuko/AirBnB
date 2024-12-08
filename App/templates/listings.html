@@ -5,26 +5,24 @@
 {% endblock title %}
 
 {% block mainContent %}
-    <div class="container my-5">
-        <h1 class="mb-4">Your Listings</h1>
-        <div class="row">
-            <div class="col-12" style="height: 400px; overflow-y: auto;">
-                {% for listing in listings %}
-                    <div class="card mb-3" style="max-width: 18rem; margin-bottom: 20px;">
-                        <!-- Dynamically display the listing's images (ensure you have a default or real image field in your model) -->
-                        <img src="{{ listing.photos.first.image.url }}" class="card-img-top" alt="{{ listing.title }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ listing.title }}</h5>
-                            <p class="card-text">{{ listing.description }}</p>
-                            <p><strong>Price per night:</strong> KES {{ listing.price_per_night }}</p>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bookingModal{{ listing.id }}">
-                                Book Now
-                            </button>
-                        </div>
+    <h1 class="mb-4">Your Listings</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for listing in listings %}
+            <div class="col">
+                <div class="card h-100">
+                    <!-- Dynamically display the listing's images -->
+                    <img src="{{ listing.photos.first.image.url }}" class="card-img-top" alt="{{ listing.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ listing.title }}</h5>
+                        <p class="card-text">{{ listing.description }}</p>
+                        <p><strong>Price per night:</strong> KES {{ listing.price_per_night }}</p>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bookingModal{{ listing.id }}">
+                            Book Now
+                        </button>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 
     {% for listing in listings %}
@@ -52,9 +50,9 @@
                 </div>
             </div>
         </div>
-        <!-- Add Bootstrap JS and jQuery for modal functionality -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     {% endfor %}
 
+    <!-- Add Bootstrap JS and jQuery for modal functionality -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 {% endblock mainContent %}
