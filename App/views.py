@@ -190,26 +190,64 @@ def cancel_booking(request, booking_id):
     
     return render(request, 'cancel_confirmation.html', {'booking': booking})
 
-@login_required
-def cancel_booking(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, guest=request.user.id)
-
-    if request.method == 'POST':
-        booking.delete()  # Delete the booking
-
-        messages.success(request, "Your booking has been cancelled successfully.")
-        return redirect('bookings_page')
 
     return render(request, 'cancel_confirmation.html', {'booking': booking})
+
+@login_required
+def make_booking(request):
+    if request.method == 'POST':
+        listing_id = request.POST.get('listing_id')
+        listing = get_object_or_404(Listing, id=listing_id)
+        user = User.objects.get(pk=request.user.pk) # Fetching user direct
+
+        # Check if the user already has a booking for this listing
+        existing_booking = Booking.objects.filter(listing=listing.id, guest=user.id).first()  # Use user object directly
+        if existing_booking:
+            messages.error(request, "You already have a booking for this listing.")
+            return redirect('listings_page')
+
+        # Create a new booking
+        booking = Booking.objects.create(
+            listing=listing,
+            guest=user._wrapped if hasattr(user, '_wrapped') else user,  # Unwrap SimpleLazyObject
+            start_date="2024-12-10",  # Example start date, can be dynamic
+            end_date="2024-12-15",  # Example end date, can be dynamic
+            total_price=listing.price_per_night * 5  # Example pricing, can be dynamic
+        )
+
+        messages.success(request, f"Successfully booked {listing.title}!")
+        return redirect('bookings_page')
+    return redirect('listings_page')
+
 
 def faq(request):
     return render(request, "faq.html")
 
-def feedback(request):
-    return render(request, "feedback.html")
+from django.contrib.auth.models import User
 
+@login_required
+def feedback(request):
+    if request.method == 'POST':
+        feedback_content = request.POST.get('feedback')
+        
+        # Save the feedback to the database
+        if feedback_content:
+            Feedback.objects.create(
+                user=User.objects.get(pk=request.user.id),  # Convert to a proper User instance
+                content=feedback_content
+            )
+            messages.success(request, "Your feedback has been submitted successfully!")
+            return redirect('feedback_page')  # Redirect to the feedback page to show the success message
+        else:
+            messages.error(request, "Please provide your feedback before submitting.")
+            return redirect('feedback_page')
+    
+    return render(request, 'feedback.html')
+
+@login_required
 def listings(request):
-    return render(request, "listings.html")
+    listings = Listing.objects.all()  # Get all listings from the database
+    return render(request, 'listings.html', {'listings': listings})
 
 def messagesM(request):
     dataMessages = Message.objects.all()
@@ -224,13 +262,38 @@ def delete_message(request, message_id):
     return render(request, "messagesM.html")
 
 def payments(request):
-    return render(request, "payments.html")
+    user = request.user
+
+    # Get the user's balance from the database (if needed for payment)
+    # user_balance = user.balance
+
+    # Get all the user's past bookings
+    bookings = Booking.objects.filter(guest=user.id)
+
+    # Get the user's payment history (related to those bookings)
+    payments = Payment.objects.filter(booking__guest=user.id)
+
+    # Handle the phone number prompt for payment
+    if request.method == "POST":
+        phone_number = request.POST.get('phone_number')
+
+        if not phone_number:
+            messages.error(request, "Please enter a phone number for the transaction.")
+            return redirect('payment_page')
+
+        # Proceed with the payment logic (e.g., external payment API integration)
+        # For now, we'll simply show a success message
+        messages.success(request, "Payment has been successfully processed!")
+
+    return render(request, 'payments.html', {
+        # 'user_balance': user_balance,
+        'bookings': bookings,
+        'payments': payments,
+    })
 
 def support(request):
     return render(request, "support.html")
 
-def makeBooking(request):
-    return render(request, "makeBooking.html")
     
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -292,3 +355,39 @@ def delete_account(request):
     user.delete()  # Delete the account
     messages.success(request, "Your account has been deleted.")
     return redirect('login_page')  # Redirect to the home or login page
+
+@login_required
+def process_payment(request, booking_id):
+    # Get the booking details
+    booking = Booking.objects.get(id=booking_id)
+    user = booking.guest
+
+    # Calculate the payment amount (this should be the total price of the booking)
+    amount_to_pay = booking.total_price
+
+    # Check if the user has enough balance
+    if user.balance >= amount_to_pay:
+        # Deduct the amount from the user's balance
+        user.balance -= amount_to_pay
+        user.save()
+
+        # Create a payment record
+        payment = Payment.objects.create(
+            booking=booking,
+            amount=amount_to_pay,
+            status='completed'
+        )
+
+        # Update booking payment status
+        booking.payment = payment
+        booking.save()
+
+        # Redirect to success page or dashboard
+        return redirect('payment_success')
+
+    else:
+        # If the user doesn't have enough balance, show an error
+        return redirect('insufficient_balance')
+
+
+

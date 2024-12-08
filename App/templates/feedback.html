@@ -1,3 +1,4 @@
+<!-- feedback.html -->
 {% extends 'baseForAfterLogin.html' %}
 
 {% block title %}
@@ -7,10 +8,12 @@
 {% block mainContent %}
     <div class="container my-5">
         <h1 class="mb-4">Feedback</h1>
-        <form>
+
+        <form method="POST">
+            {% csrf_token %}
             <div class="mb-3">
                 <label for="feedback" class="form-label">Share Your Feedback</label>
-                <textarea class="form-control" id="feedback" rows="5"></textarea>
+                <textarea class="form-control" id="feedback" name="feedback" rows="5" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit Feedback</button>
         </form>
