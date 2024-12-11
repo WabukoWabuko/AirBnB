@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'AirBnB.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # Default SQLite file in your project directory
+        'NAME': BASE_DIR / 'db.sqlite3',  # SQLite3 DB
     }
 }
 
@@ -134,13 +134,3 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# from google.cloud import speech_v1p1beta1 as speech
-# def transcribe_audio(audio_content):
-#     client = speech.SpeechClient()
-#     audio = speech.RecognitionAudio(content=audio_content)
-#     config = speech.RecognitionConfig(
-#         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-#         language_code="en-US",
-#     )
-#     response = client.recognize(config=config, audio=audio)
-#     return [result.alternatives[0].transcript for result in response.results]

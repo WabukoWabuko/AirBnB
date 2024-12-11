@@ -78,7 +78,7 @@
                         <div id="statusMessage" class="alert alert-info mt-3" style="display: none;"></div>
                     </div>
                     
-                    <!-- JS works over here for sound recognition -->
+                    <!-- Sound recognition using JS -->
                     <script>
                         // Speech generated immediately after logging in, this is to help the blind/ PWD 
                         window.onload = function() {
@@ -89,7 +89,7 @@
                             
                             // Create a new SpeechSynthesisUtterance object with the welcome message
                             const utterance = new SpeechSynthesisUtterance(welcomeMessage);
-                            utterance.rate = 0.8; // You can adjust the rate of speech here
+                            utterance.rate = 0.8; // 1 is the highest and fastest speech rate
 
                             // Speak the message
                             synth.speak(utterance);
@@ -154,7 +154,7 @@
                             // Play the sound message
                             const synth = window.speechSynthesis;
                             const utterance = new SpeechSynthesisUtterance("Activated. Stay Safe.");
-                            utterance.rate = 1; // You can adjust the rate of speech here
+                            utterance.rate = 1; // Speech rate
                             synth.speak(utterance);
                         });
                     </script>                    
