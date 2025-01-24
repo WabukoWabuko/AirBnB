@@ -14,7 +14,14 @@ SECRET_KEY = 'django-insecure-cuua6r$mp+q84$)aq^mohv=h@1=s(n3(2%48lio%bfpw%cbnu2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Here we add the hosts to be used
+ALLOWED_HOSTS = ['6jy3w5-8000.csb.app']
+
+# we add the CSRF origins that are trusted
+CSRF_TRUSTED_ORIGINS = [
+    'https://6jy3w5-8000.csb.app',
+    # other trusted origins can be added here
+]
 
 
 # Application definition
@@ -127,10 +134,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

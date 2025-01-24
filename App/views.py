@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User as bamdam
@@ -7,11 +9,14 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from .models import * # Which are Booking, User, UserVerification, Listing, Amenity, PropertyPhoto,
-                    #Payment, Review, Message, Notification, SupportTicket, BlackList, SecurityAlert,
-                    #GeoTracking, Discount
+# Which are Booking, User, UserVerification, Listing, Amenity, PropertyPhoto,
+from .models import *
+# Payment, Review, Message, Notification, SupportTicket, BlackList, SecurityAlert,
+# GeoTracking, Discount
 
 # Leading to Home/Index page as my landing page.
+
+
 def Index(request):
     return render(request, "index.html")
 
@@ -43,6 +48,7 @@ def report_emergency(request):
 
 
 # Logging in to an already available account.
+@csrf_protect
 def Login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -60,6 +66,7 @@ def Login(request):
         form = LoginForm()
     return render(request, 'Login.html', {'form': form})
 
+
 def Logout(request):
     logout(request)
 
@@ -67,16 +74,19 @@ def Logout(request):
 
     return redirect('login_page')  # Change this to the appropriate page
 
+
 # Creating an account at this point
+@csrf_protect
 def SignUp(request):
-    # After clicking the button it should submit and go direct to verification page 
+    # After clicking the button it should submit and go direct to verification page
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
 
             if bamdam.objects.filter(email=form.cleaned_data.get('email')).exists():
-                    messages.error(request, "An account with this email already exists.")
-                    return redirect('signup_page')  # Prevent duplicate email
+                messages.error(
+                    request, "An account with this email already exists.")
+                return redirect('signup_page')  # Prevent duplicate email
 
             password = form.cleaned_data.get('password')
             confirm_password = form.cleaned_data.get('confirm_password')
@@ -86,7 +96,7 @@ def SignUp(request):
                     email=form.cleaned_data.get('email'),
                     password=password,
                 )
-                
+
                 user.set_password(password)
                 try:
                     user.save()
@@ -102,12 +112,14 @@ def SignUp(request):
         form = SignupForm()
     return render(request, 'SignUp.html', {'form': form})
 
+
 def IDVerification(request):
     if request.method == "POST":
         form = IdentityVerificationForm(request.POST, request.FILES)
         if form.is_valid():
             # Get or create the user object based on email or other unique data
-            user_email = request.POST.get("email")  # Email passed as hidden input or from form data
+            # Email passed as hidden input or from form data
+            user_email = request.POST.get("email")
             user = get_object_or_404(User, email=user_email)
 
             # Save the verification details
@@ -134,21 +146,22 @@ def otherVerification(request):
         form = AuthenticationCodeForm(request.POST)
         if form.is_valid():
             verification_code = form.cleaned_data.get("verification_code")
-            
+
             # Add logic to verify the code here
-            
+
             messages.success(request, "Authentication successful!")
-            return redirect("success_page")  # Replace with the actual success URL
+            # Replace with the actual success URL
+            return redirect("success_page")
         else:
             messages.error(request, "Invalid verification code.")
     else:
         form = AuthenticationCodeForm()
     return render(request, "otherVerificationWays.html", {"form": form})
-    
+
 
 @login_required
 def dashboard(request):
-    #In Dashboard should display data from the DB
+    # In Dashboard should display data from the DB
     data = User.objects.all()
     user = request.user
     try:
@@ -159,6 +172,7 @@ def dashboard(request):
     return render(request, "Dashboard.html", {'data': data,
                                               'user': user,
                                               'profile_picture': profile_picture})
+
 
 @login_required
 def bookings(request):
@@ -176,6 +190,7 @@ def bookings(request):
 
     return render(request, 'bookings.html', context)
 
+
 @login_required
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
@@ -185,29 +200,32 @@ def cancel_booking(request, booking_id):
         booking.delete()  # Delete the booking
         messages.success(request, "Booking has been cancelled successfully.")
         return redirect('bookings_page')
-    
-    return render(request, 'cancel_confirmation.html', {'booking': booking})
-
 
     return render(request, 'cancel_confirmation.html', {'booking': booking})
+
+    return render(request, 'cancel_confirmation.html', {'booking': booking})
+
 
 @login_required
 def make_booking(request):
     if request.method == 'POST':
         listing_id = request.POST.get('listing_id')
         listing = get_object_or_404(Listing, id=listing_id)
-        user = User.objects.get(pk=request.user.pk) # Fetching user direct
+        user = User.objects.get(pk=request.user.pk)  # Fetching user direct
 
         # Check if the user already has a booking for this listing
-        existing_booking = Booking.objects.filter(listing=listing.id, guest=user.id).first()  # Use user object directly
+        existing_booking = Booking.objects.filter(
+            listing=listing.id, guest=user.id).first()  # Use user object directly
         if existing_booking:
-            messages.error(request, "You already have a booking for this listing.")
+            messages.error(
+                request, "You already have a booking for this listing.")
             return redirect('listings_page')
 
         # Create a new booking
         booking = Booking.objects.create(
             listing=listing,
-            guest=user._wrapped if hasattr(user, '_wrapped') else user,  # Unwrap SimpleLazyObject
+            guest=user._wrapped if hasattr(
+                user, '_wrapped') else user,  # Unwrap SimpleLazyObject
             start_date="2024-12-10",  # Example start date, can be dynamic
             end_date="2024-12-15",  # Example end date, can be dynamic
             total_price=listing.price_per_night * 5  # Example pricing, can be dynamic
@@ -217,40 +235,47 @@ def make_booking(request):
         return redirect('bookings_page')
     return redirect('listings_page')
 
+
 @login_required
 def faq(request):
     return render(request, "faq.html")
 
-from django.contrib.auth.models import User
 
 @login_required
 def feedback(request):
     if request.method == 'POST':
         feedback_content = request.POST.get('feedback')
-        
+
         # Save the feedback to the database
         if feedback_content:
             Feedback.objects.create(
-                user=User.objects.get(pk=request.user.id),  # Convert to a proper User instance
+                # Convert to a proper User instance
+                user=User.objects.get(pk=request.user.id),
                 content=feedback_content
             )
-            messages.success(request, "Your feedback has been submitted successfully!")
-            return redirect('feedback_page')  # Redirect to the feedback page to show the success message
-        else:
-            messages.error(request, "Please provide your feedback before submitting.")
+            messages.success(
+                request, "Your feedback has been submitted successfully!")
+            # Redirect to the feedback page to show the success message
             return redirect('feedback_page')
-    
+        else:
+            messages.error(
+                request, "Please provide your feedback before submitting.")
+            return redirect('feedback_page')
+
     return render(request, 'feedback.html')
+
 
 @login_required
 def listings(request):
     listings = Listing.objects.all()  # Get all listings from the database
     return render(request, 'listings.html', {'listings': listings})
 
+
 @login_required
 def messagesM(request):
     dataMessages = Message.objects.all()
     return render(request, "messagesM.html", {'dataMessages': dataMessages})
+
 
 @login_required
 def delete_message(request, message_id):
@@ -260,6 +285,7 @@ def delete_message(request, message_id):
         messages.success(request, "Message deleted successfully.")
         return redirect('messages_page')
     return render(request, "messagesM.html")
+
 
 @login_required
 def payments(request):
@@ -279,7 +305,8 @@ def payments(request):
         phone_number = request.POST.get('phone_number')
 
         if not phone_number:
-            messages.error(request, "Please enter a phone number for the transaction.")
+            messages.error(
+                request, "Please enter a phone number for the transaction.")
             return redirect('payment_page')
 
         # Proceed with the payment logic (e.g., external payment API integration)
@@ -292,6 +319,7 @@ def payments(request):
         'payments': payments,
     })
 
+
 @login_required
 def support(request):
     if request.method == 'POST':
@@ -299,7 +327,7 @@ def support(request):
         issue = request.POST.get('issue')
 
         # Ensure a user is logged in, and associate the ticket with the user
-        user = User.objects.get(pk=request.user.pk) # Fetching user direct
+        user = User.objects.get(pk=request.user.pk)  # Fetching user direct
 
         # Create the support ticket in the database
         ticket = SupportTicket.objects.create(
@@ -310,27 +338,30 @@ def support(request):
         )
 
         # Optionally, provide feedback to the user about ticket creation
-        messages.success(request, "Your support ticket has been submitted successfully. Our team will get back to you shortly.")
-        
+        messages.success(
+            request, "Your support ticket has been submitted successfully. Our team will get back to you shortly.")
+
         # Redirect to the support page after submission
         return redirect('support_page')
 
     return render(request, "support.html")
 
-    
-from django.contrib.auth import get_user_model
+
 User = get_user_model()
+
+
 def compose_message(request):
     if request.method == "POST":
         sender = request.user  # Assumes the user is authenticated
         receiver_id = request.POST.get('receiver')
         content = request.POST.get('content')
-        
+
         print(f"Receiver ID: {receiver_id}")  # Debugging step
 
         try:
             receiver = User.objects.get(id=receiver_id)
-            Message.objects.create(sender=sender, receiver=receiver, content=content)
+            Message.objects.create(
+                sender=sender, receiver=receiver, content=content)
             messages.success(request, "Message sent successfully!")
         except User.DoesNotExist:
             messages.error(request, "Recipient does not exist.")
@@ -340,37 +371,40 @@ def compose_message(request):
 @login_required
 def profile(request):
     user = request.user  # Get the logged-in user
-    verification = UserVerification.objects.filter(email=user.id).first()  # Get verification data
-    
+    verification = UserVerification.objects.filter(
+        email=user.id).first()  # Get verification data
+
     if request.method == "POST":
         username = request.POST.get('username')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         photo = request.FILES.get('photo')
-        
+
         # Update user details
         user.username = username
         user.phone = phone
         user.email = email
-        
+
         try:
             user.save()  # Save changes to the User table
-            
+
             # Optionally update the photo in UserVerification
             if photo and verification:
                 verification.photo = photo
                 verification.save()
-            
+
             messages.success(request, "Profile updated successfully!")
         except Exception as e:
             messages.error(request, f"An error occurred: {e}")
         return redirect('profile_page')  # Redirect back to the profile page
-    
+
     context = {
         'user': user,
-        'photo': verification.photo.url if verification and verification.photo else None,  # Profile picture
+        # Profile picture
+        'photo': verification.photo.url if verification and verification.photo else None,
     }
     return render(request, 'profile.html', context)
+
 
 @login_required
 def delete_account(request):
@@ -378,6 +412,7 @@ def delete_account(request):
     user.delete()  # Delete the account
     messages.success(request, "Your account has been deleted.")
     return redirect('login_page')  # Redirect to the home or login page
+
 
 @login_required
 def process_payment(request, booking_id):
@@ -411,6 +446,3 @@ def process_payment(request, booking_id):
     else:
         # If the user doesn't have enough balance, show an error
         return redirect('insufficient_balance')
-
-
-
