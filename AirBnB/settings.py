@@ -21,6 +21,7 @@ ALLOWED_HOSTS = ['6jy3w5-8000.csb.app']
 # Application definition
 
 INSTALLED_APPS = [
+    #'django-extensions', # python manage.py graph_models -a -o myapp_models.png
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,8 +143,6 @@ CSRF_TRUSTED_ORIGINS = [
     # other trusted origins can be added here
 ]
 
-# Setting custom user Model 
-# AUTH_USER_MODEL = 'App.User'
 
 # To authenticate emails instead of user names
 AUTHENTICATION_BACKENDS = [
