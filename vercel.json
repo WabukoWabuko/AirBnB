@@ -1,7 +1,15 @@
 {
-  "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "AirBnB/wsgi.py" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "AirBnB/wsgi.py",
+      "use": "@vercel/python"
+    }
   ],
-  "builds": [{ "src": "AirBnB/wsgi.py", "use": "@vercel/python" }]
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    }
+  ]
 }
