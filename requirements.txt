@@ -2,5 +2,8 @@ django_daraja
 pillow
 crispy_bootstrap4
 django_crispy_forms
-pymysql
 django
+vercel
+gunicorn
+whitenoise
+mysqlclient
