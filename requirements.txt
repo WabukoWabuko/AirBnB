@@ -6,3 +6,4 @@ django
 vercel
 gunicorn
 whitenoise
+pymysql

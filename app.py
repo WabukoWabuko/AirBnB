@@ -3,6 +3,6 @@
 import os
 from django.core.wsgi import get_wsgi_application
 
-# Replace "your_project_name" with your actual project name
+# for accessing Django modules and also kufikia settings za Project
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AirBnB.settings")
 app = get_wsgi_application()
