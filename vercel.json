@@ -1,7 +1,7 @@
 {
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "app.py" }
+    { "src": "/(.*)", "dest": "AirBnB/wsgi.py" }
   ],
   "builds": [{ "src": "AirBnB/wsgi.py", "use": "@vercel/python" }]
 }
