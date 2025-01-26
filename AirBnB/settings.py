@@ -15,7 +15,8 @@ SECRET_KEY = 'django-insecure-cuua6r$mp+q84$)aq^mohv=h@1=s(n3(2%48lio%bfpw%cbnu2
 DEBUG = False  # False because i am hosting it.
 
 # Here we add the hosts to be used.
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['salamabnb.vercel.app', 'localhost',
+                 '127.0.0.1']  # removed * coz it want's precision
 
 
 # Application definition
@@ -132,8 +133,10 @@ STATIC_URL = '/static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # from AI IDK what it will do haha
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -143,6 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # we add the CSRF origins that are trusted
 CSRF_TRUSTED_ORIGINS = [
+    'https://salamabnb.vercel.app',  # added because of vercel
     'https://3pld4x-8000.csb.app',
     # other trusted origins can be added here
 ]
