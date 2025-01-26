@@ -6,4 +6,3 @@ django
 vercel
 gunicorn
 whitenoise
-mysqlclient
