@@ -15,13 +15,13 @@ SECRET_KEY = 'django-insecure-cuua6r$mp+q84$)aq^mohv=h@1=s(n3(2%48lio%bfpw%cbnu2
 DEBUG = True
 
 # Here we add the hosts to be used.
-ALLOWED_HOSTS = ['6jy3w5-8000.csb.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    #'django-extensions', # python manage.py graph_models -a -o myapp_models.png
+    # 'django-extensions', # python manage.py graph_models -a -o myapp_models.png
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # we add the CSRF origins that are trusted
 CSRF_TRUSTED_ORIGINS = [
-    'https://6jy3w5-8000.csb.app',
+    'https://3pld4x-8000.csb.app',
     # other trusted origins can be added here
 ]
 
