@@ -149,7 +149,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'https://salamabnb.vercel.app',  # added because of vercel
     'https://3pld4x-8000.csb.app',
-    # other trusted origins can be added here
 ]
 
 
